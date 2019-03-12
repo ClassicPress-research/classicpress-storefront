@@ -1940,6 +1940,15 @@ button.menu-toggle:after {
         margin-left: 0;
         margin-right: 0
     }
+	.page-template-template-fullscreen-php .site-main {
+		margin-bottom: 0;
+	}
+	.page-template-template-fullscreen-php .hentry {
+		margin: 0;
+	}
+	.page-template-template-fullscreen-php .content-area {
+		margin: 0 auto
+	}
 	.page-template-template-fullwidth-php .entry-header img,
 	.page-template-template-fullscreen-php .entry-header img {
 		max-width: 100em;
@@ -2131,6 +2140,13 @@ button.menu-toggle:after {
     .primary-navigation {
         display: block
     }
+	.center-primary .primary-navigation {
+		text-align: center;
+	}
+
+	.right-primary .primary-navigation {
+		text-align: right;
+	}
     .main-navigation,
     .secondary-navigation {
         clear: both;

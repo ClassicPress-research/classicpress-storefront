@@ -80,5 +80,5 @@ add_action( 'storefront_page_after', 'storefront_display_comments', 10 );
  * @see  storefront_homepage_header()
  * @see  storefront_page_content()
  */
-add_action( 'storefront_homepage', 'storefront_homepage_header', 10 );
-add_action( 'storefront_homepage', 'storefront_page_content', 20 );
+//add_action( 'storefront_fullscreen', 'storefront_homepage_header', 10 );
+add_action( 'storefront_fullscreen', 'storefront_page_content', 20 );

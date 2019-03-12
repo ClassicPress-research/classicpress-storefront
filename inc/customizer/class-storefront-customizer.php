@@ -25,6 +25,7 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 		public function __construct() {
 			add_action( 'customize_register', array( $this, 'customize_register' ), 10 );
 			add_filter( 'body_class', array( $this, 'layout_class' ) );
+			add_filter( 'body_class', array( $this, 'primary_menu_layout_class' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'add_customizer_css' ), 130 );
 			add_action( 'customize_controls_print_styles', array( $this, 'customizer_custom_control_css' ) );
 			add_action( 'customize_register', array( $this, 'edit_default_customizer_settings' ), 99 );
@@ -60,6 +61,7 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 					'storefront_button_alt_background_color' 	=> '#333333',
 					'storefront_button_alt_text_color'   		=> '#ffffff',
 					'storefront_layout'                  		=> 'right',
+					'storefront_primary_menu_pos' 				=> 'left',
 					'background_color'                   		=> 'ffffff',
 				)
 			);
@@ -162,13 +164,24 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			require_once dirname( __FILE__ ) . '/class-storefront-customizer-control-radio-image.php';
 			require_once dirname( __FILE__ ) . '/class-storefront-customizer-control-arbitrary.php';
 
+			$wp_customize->get_section ('title_tagline')->panel = 'storefront_options_panel';
+			$wp_customize->get_section ('header_image')->panel = 'storefront_options_panel';
+			$wp_customize->get_section ('background_image')->panel = 'storefront_options_panel';
+			
+			$wp_customize->add_panel( 'storefront_options_panel', array(
+			'title' => __( 'ClassicPress Storefront Options', 'storefront' ),
+			'description' => __( 'Holds all our Business Page addons', 'storefront' ), // Include html tags such as <p>.
+			'priority' => 10, // Mixed with top-level-section hierarchy.
+		) );
+			
 			/**
 			 * Add the typography section
 			 */
 			$wp_customize->add_section(
 				'storefront_typography', array(
 					'title'    => __( 'Typography', 'storefront' ),
-					'priority' => 45,
+					'panel' => 'storefront_options_panel',
+					'priority' => 50,
 				)
 			);
 
@@ -358,8 +371,9 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			 */
 			$wp_customize->add_section(
 				'storefront_footer', array(
-					'title'       => __( 'Footer', 'storefront' ),
-					'priority'    => 28,
+					'title'       => __( 'Footer', 'storefront' ),					
+					'panel' => 'storefront_options_panel',
+					'priority'    => 30,
 					'description' => __( 'Customize the look & feel of your website footer.', 'storefront' ),
 				)
 			);
@@ -454,7 +468,8 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			$wp_customize->add_section(
 				'storefront_buttons', array(
 					'title'       => __( 'Buttons', 'storefront' ),
-					'priority'    => 45,
+					'panel' => 'storefront_options_panel',
+					'priority'    => 60,
 					'description' => __( 'Customize the look & feel of your website buttons.', 'storefront' ),
 				)
 			);
@@ -542,6 +557,41 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 					)
 				)
 			);
+			
+			/**
+			 * Layout
+			 */
+			$wp_customize->add_section(
+				'storefront_primary_menu_pos', array(
+					'title'    => __( 'Primary Menu', 'storefront' ),
+					'panel' => 'storefront_options_panel',
+					'priority' => 25,
+				)
+			);
+
+			$wp_customize->add_setting(
+				'storefront_primary_menu_pos', array(
+					'default'           => apply_filters( 'storefront_default_primary_position', $position = is_rtl() ? 'right' : 'left' ),
+					'sanitize_callback' => 'storefront_sanitize_choices',
+				)
+			);
+			
+			$wp_customize->add_control(
+				new WP_Customize_Control(
+					$wp_customize, 'storefront_primary_menu_pos', array(
+						'settings' => 'storefront_primary_menu_pos',
+						'section'  => 'storefront_primary_menu_pos',
+						'label'    => __( 'Primary Menu Layout', 'storefront' ),
+						'priority' => 1,
+						'type'     => 'radio',
+						'choices'  => array(
+							'left' => 'Left Alligned ~ Default',
+							'center' => 'Center Alligned',
+							'right'  => 'Right Alligned',
+						),
+					)
+				)
+			);
 
 			/**
 			 * Layout
@@ -549,7 +599,8 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			$wp_customize->add_section(
 				'storefront_layout', array(
 					'title'    => __( 'Layout', 'storefront' ),
-					'priority' => 50,
+					'panel' => 'storefront_options_panel',
+					'priority' => 25,
 				)
 			);
 
@@ -894,6 +945,22 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			$left_or_right = get_theme_mod( 'storefront_layout' );
 
 			$classes[] = $left_or_right . '-sidebar';
+
+			return $classes;
+		}
+		
+		/**
+		 * Primary Menu Layout classes
+		 * Adds 'center-primary' and 'right-primary' classes to the body tag
+		 *
+		 * @param  array $classes current body classes.
+		 * @return string[]          modified body classes
+		 * @since  1.0.0
+		 */
+		public function primary_menu_layout_class( $classes ) {
+			$center_or_right = get_theme_mod( 'storefront_primary_menu_pos' );
+
+			$classes[] = $center_or_right . '-primary';
 
 			return $classes;
 		}

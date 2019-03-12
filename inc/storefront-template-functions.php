@@ -144,7 +144,7 @@ if ( ! function_exists( 'storefront_credit' ) ) {
 					the_privacy_policy_link( '', '<span role="separator" aria-hidden="true"></span>' );
 				}
 				?>
-				<?php echo '<a href="https://classicpress.net" target="_blank" title="' . esc_attr__( 'ClassicPress', 'storefront' ) . '" rel="author">' . esc_html__( ' ~ Made with ❤ and ClassicPress', 'storefront' ) . '</a>.'; ?>
+				<?php echo '<a href="https://classicpress.net" target="_blank" title="' . esc_attr__( 'ClassicPress', 'storefront' ) . '" rel="author">' . esc_html__( ' ~ Built with ❤ and ClassicPress', 'storefront' ) . '</a>.'; ?>
 			<?php } ?>
 		</div><!-- .site-info -->
 		<?php

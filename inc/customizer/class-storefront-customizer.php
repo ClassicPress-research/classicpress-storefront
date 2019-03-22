@@ -585,7 +585,7 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 						'priority' => 1,
 						'type'     => 'radio',
 						'choices'  => array(
-							'left' => __( 'Left Aligned (Default', 'storefront' ),
+							'left' => __( 'Left Aligned (Default)', 'storefront' ),
 							'center' => __( 'Center Aligned', 'storefront' ),
 							'right'  => __( 'Right Aligned', 'storefront' ),
 						),
